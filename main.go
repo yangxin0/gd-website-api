@@ -88,6 +88,7 @@ func main() {
 	// Setting the application to release mode
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
+    r.LoadHTMLGlob("templates/*")
 	r.Use(cors.Default())
 
 	// Defining the root endpoint which returns the project details
@@ -97,6 +98,29 @@ func main() {
 			"message": "DeepL Free API, Developed by sjlleo and missuo. Go to /translate with POST. http://github.com/OwO-Network/DeepLX",
 		})
 	})
+
+    // Free API endpoint for GoldenDict, No Pro Account required
+    r.GET("/goldendict", authMiddleware(cfg), func(c *gin.Context) {
+        sourceLang := ""
+        targetLang := "ZH"
+		translateText := c.Query("gdword")
+		authKey := cfg.AuthKey
+		proxyURL := cfg.Proxy
+
+		result, err := translateByDeepLX(sourceLang, targetLang, translateText, authKey, proxyURL)
+		if err != nil {
+			log.Fatalf("Translation failed: %s", err)
+		}
+
+		if result.Code == http.StatusOK {
+            c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
+                "Text": result.Data,
+            })
+		} else {
+            c.String(result.Code, result.Message)
+		}
+	})
+
 
 	// Free API endpoint, No Pro Account required
 	r.POST("/translate", authMiddleware(cfg), func(c *gin.Context) {
