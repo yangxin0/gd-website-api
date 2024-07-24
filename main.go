@@ -102,6 +102,24 @@ func main() {
 		}
 	})
 
+    r.GET("/youdao", authMiddleware(cfg), func(c *gin.Context) {
+        c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
+            "Text": "Not implemented",
+        })
+    })
+
+    r.GET("/openai", authMiddleware(cfg), func(c *gin.Context) {
+        c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
+            "Text": "Not implemented",
+        })
+    })
+
+    r.GET("/google", authMiddleware(cfg), func(c *gin.Context) {
+        c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
+            "Text": "Not implemented",
+        })
+    })
+
 	// Catch-all route to handle undefined paths
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{
