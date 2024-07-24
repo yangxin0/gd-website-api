@@ -1,12 +1,12 @@
 [Unit]
-Description=DeepLX Service
-After=network.target
+Description=GoldenDict Website API
+After=network-online.target
 
 [Service]
 Type=simple
 Restart=always
-WorkingDirectory=/usr/bin/
-ExecStart=/usr/bin/deeplx
+ExecStart=/usr/local/deeplx/DeepLX
+WorkingDirectory=/usr/local/deeplx
 
 [Install]
 WantedBy=multi-user.target
