@@ -80,8 +80,8 @@ func main() {
     r.LoadHTMLGlob("templates/*")
 	r.Use(cors.Default())
 
-    // Free API endpoint for GoldenDict, No Pro Account required
-    r.GET("/goldendict", authMiddleware(cfg), func(c *gin.Context) {
+    // DeepL free account API
+    r.GET("/deepl", authMiddleware(cfg), func(c *gin.Context) {
         sourceLang := ""
         targetLang := "ZH"
 		translateText := c.Query("gdword")
