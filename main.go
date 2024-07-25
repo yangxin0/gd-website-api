@@ -14,8 +14,7 @@ import (
 func main() {
 	cfg := initConfig()
 
-	fmt.Printf("DeepL X has been successfully launched! Listening on 0.0.0.0:%v\n", cfg.Port)
-	fmt.Println("Developed by sjlleo <i@leo.moe> and missuo <me@missuo.me>.")
+	fmt.Printf("Goldendict Website API. Listening on 0.0.0.0:%v\n", cfg.Port)
 
 	// Set Proxy
 	proxyURL := os.Getenv("PROXY")

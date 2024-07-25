@@ -1,15 +1,3 @@
-/*
- * @Author: Vincent Yang
- * @Date: 2024-04-23 00:39:03
- * @LastEditors: Vincent Yang
- * @LastEditTime: 2024-06-18 02:40:52
- * @FilePath: /DeepLX/config.go
- * @Telegram: https://t.me/missuo
- * @GitHub: https://github.com/missuo
- *
- * Copyright © 2024 by Vincent, All Rights Reserved.
- */
-
 package main
 
 import (
