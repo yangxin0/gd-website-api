@@ -6,45 +6,10 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
-
-func authMiddleware(cfg *Config) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if cfg.Token != "" {
-			providedTokenInQuery := c.Query("token")
-			providedTokenInHeader := c.GetHeader("Authorization")
-
-			// Compatability with the Bearer token format
-			if providedTokenInHeader != "" {
-				parts := strings.Split(providedTokenInHeader, " ")
-				if len(parts) == 2 {
-					if parts[0] == "Bearer" || parts[0] == "DeepL-Auth-Key" {
-						providedTokenInHeader = parts[1]
-					} else {
-						providedTokenInHeader = ""
-					}
-				} else {
-					providedTokenInHeader = ""
-				}
-			}
-
-			if providedTokenInHeader != cfg.Token && providedTokenInQuery != cfg.Token {
-				c.JSON(http.StatusUnauthorized, gin.H{
-					"code":    http.StatusUnauthorized,
-					"message": "Invalid access token",
-				})
-				c.Abort()
-				return
-			}
-		}
-
-		c.Next()
-	}
-}
 
 func main() {
 	cfg := initConfig()
@@ -81,7 +46,7 @@ func main() {
 	r.Use(cors.Default())
 
     // DeepL free account API
-    r.GET("/deepl", authMiddleware(cfg), func(c *gin.Context) {
+    r.GET("/deepl", func(c *gin.Context) {
         sourceLang := ""
         targetLang := "ZH"
 		translateText := c.Query("gdword")
@@ -102,19 +67,19 @@ func main() {
 		}
 	})
 
-    r.GET("/youdao", authMiddleware(cfg), func(c *gin.Context) {
+    r.GET("/youdao", func(c *gin.Context) {
         c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
             "Text": "Not implemented",
         })
     })
 
-    r.GET("/openai", authMiddleware(cfg), func(c *gin.Context) {
+    r.GET("/openai", func(c *gin.Context) {
         c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
             "Text": "Not implemented",
         })
     })
 
-    r.GET("/google", authMiddleware(cfg), func(c *gin.Context) {
+    r.GET("/google", func(c *gin.Context) {
         c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
             "Text": "Not implemented",
         })
