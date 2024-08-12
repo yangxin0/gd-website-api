@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/OwO-Network/DeepLX/deepl"
+    "github.com/yangxin0/gd-website-api/deepl"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/ini.v1"

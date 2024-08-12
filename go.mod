@@ -1,4 +1,4 @@
-module github.com/OwO-Network/DeepLX
+module github.com/yangxin0/gd-website-api
 
 go 1.22
 
