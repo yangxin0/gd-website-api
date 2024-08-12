@@ -1,16 +1,4 @@
-/*
- * @Author: Vincent Yang
- * @Date: 2024-04-23 00:17:27
- * @LastEditors: Vincent Yang
- * @LastEditTime: 2024-04-23 00:17:29
- * @FilePath: /DeepLX/utils.go
- * @Telegram: https://t.me/missuo
- * @GitHub: https://github.com/missuo
- *
- * Copyright © 2024 by Vincent, All Rights Reserved.
- */
-
-package main
+package deepl
 
 import (
 	"encoding/json"

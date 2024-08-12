@@ -1,4 +1,4 @@
-package main
+package deepl
 
 import (
 	"bytes"
@@ -107,7 +107,7 @@ func initDeepLXData(sourceLang string, targetLang string) *PostData {
 	}
 }
 
-func translateByOfficialAPI(text string, sourceLang string, targetLang string, authKey string, proxyURL string) (string, error) {
+func translateAPIv2(text string, sourceLang string, targetLang string, authKey string, proxyURL string) (string, error) {
 	freeURL := "https://api-free.deepl.com/v2/translate"
 	textArray := strings.Split(text, "\n")
 
@@ -171,7 +171,7 @@ func translateByOfficialAPI(text string, sourceLang string, targetLang string, a
 	return sb.String(), nil
 }
 
-func translateByDeepLX(sourceLang string, targetLang string, translateText string, authKey string, proxyURL string) (DeepLXTranslationResult, error) {
+func Translate(sourceLang string, targetLang string, translateText string, authKey string, proxyURL string) (DeepLXTranslationResult, error) {
 	id := getRandomNumber()
 	if sourceLang == "" {
 		lang := whatlanggo.DetectLang(translateText)
@@ -298,7 +298,7 @@ func translateByDeepLX(sourceLang string, targetLang string, translateText strin
 				continue
 			} else {
 				if validity {
-					translatedText, err := translateByOfficialAPI(translateText, sourceLang, targetLang, authKey, proxyURL)
+					translatedText, err := translateAPIv2(translateText, sourceLang, targetLang, authKey, proxyURL)
 					if err != nil {
 						return DeepLXTranslationResult{
 							Code:    http.StatusTooManyRequests,

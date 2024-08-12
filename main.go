@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/OwO-Network/DeepLX/deepl"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/ini.v1"
@@ -80,7 +81,7 @@ func main() {
             // No auth key for free account
             authKey := ""
 
-            result, err := translateByDeepLX(sourceLang, targetLang, translateText, authKey, proxyURL)
+            result, err := deepl.Translate(sourceLang, targetLang, translateText, authKey, proxyURL)
             if err != nil {
                 log.Fatalf("Translation failed: %s", err)
             }
