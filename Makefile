@@ -6,9 +6,9 @@ build:
 	go build
 
 install:
-	mkdir -p /usr/local/gd-website-api
-	cp DeepLX /usr/local/gd-website-api
+	mkdir -p /usr/local/gd-website-api/bin
+	cp gd-website-api /usr/local/gd-website-api/bin
 	cp -r templates /usr/local/gd-website-api
 
 clean:
-	rm DeepLX
+	rm gd-website-api
