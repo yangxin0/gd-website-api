@@ -1,10 +1,8 @@
 package openai
 
 import (
-    "os"
 	"fmt"
     "net/http"
-    "net/url"
     "context"
 
 	"github.com/gin-gonic/gin"
@@ -13,26 +11,6 @@ import (
 )
 
 var appSecret = ""
-var appProxy = ""
-
-func newClientWithProxy() *oai.Client {
-    if appProxy == "" {
-        return oai.NewClient(appSecret)
-    }
-    config := oai.DefaultConfig("token")
-    proxyUrl, err := url.Parse(appProxy)
-    if err != nil {
-        fmt.Println("OpenAI: invalid proxy URL")
-        os.Exit(1)
-    }
-    transport := &http.Transport{
-        Proxy: http.ProxyURL(proxyUrl),
-    }
-    config.HTTPClient = &http.Client{
-        Transport: transport,
-    }
-    return oai.NewClientWithConfig(config)
-}
 
 func TranslateInit(route *gin.Engine, cfg *ini.File) {
     enabled := cfg.Section("openai").Key("enable").MustBool()
@@ -60,7 +38,7 @@ func TranslateInit(route *gin.Engine, cfg *ini.File) {
 }
 
 func Translate(targetLang string, text string) (string, error) {
-    client := newClientWithProxy()
+    client := oai.NewClient(appSecret)
     systemPrompt := fmt.Sprintf("You are a highly skilled translation engine with expertise in the technology sector. Your function is to translate texts accurately into the target %s, maintaining the original format, technical terms, and abbreviations. Do not add any explanations or annotations to the translated text.", targetLang)
     prompt := fmt.Sprintf("Translate the following source text to %s, Output translation directly without any additional text.\nSource Text: %s,\nTranslated Text:", targetLang, text)
     resp, err := client.CreateChatCompletion(
