@@ -78,10 +78,8 @@ func main() {
             sourceLang := ""
             targetLang := "ZH"
             translateText := c.Query("gdword")
-            // No auth key for free account
-            authKey := ""
 
-            result, err := deepl.Translate(sourceLang, targetLang, translateText, authKey, proxyURL)
+            result, err := deepl.Translate(sourceLang, targetLang, translateText, proxyURL)
             if err != nil {
                 log.Fatalf("Translation failed: %s", err)
             }
