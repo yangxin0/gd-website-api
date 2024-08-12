@@ -3,15 +3,17 @@ package deepl
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
-	"net/url"
 	"strings"
 
 	"github.com/abadojack/whatlanggo"
 	"github.com/andybalholm/brotli"
+	"github.com/gin-gonic/gin"
 	"github.com/tidwall/gjson"
+	"gopkg.in/ini.v1"
 )
 
 type Lang struct {
@@ -107,7 +109,35 @@ func initDeepLXData(sourceLang string, targetLang string) *PostData {
 	}
 }
 
-func Translate(sourceLang string, targetLang string, translateText string, proxyURL string) (DeepLXTranslationResult, error) {
+// DeepL free account API
+func TranslateInit(route *gin.Engine, cfg *ini.File) {
+    enabled := cfg.Section("deepl").Key("enable").MustBool()
+    if enabled == false {
+        fmt.Println("Dict: DeepL Disabled")
+        return
+    }
+    fmt.Println("Dict: DeepL Enabled")
+    route.GET("/deepl", func(c *gin.Context) {
+        sourceLang := ""
+        targetLang := "ZH"
+        translateText := c.Query("gdword")
+
+        result, err := Translate(sourceLang, targetLang, translateText)
+        if err != nil {
+            log.Fatalf("Translation failed: %s", err)
+        }
+
+        if result.Code == http.StatusOK {
+            c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
+                "Text": result.Data,
+            })
+        } else {
+            c.String(result.Code, result.Message)
+        }
+    })
+}
+
+func Translate(sourceLang string, targetLang string, translateText string) (DeepLXTranslationResult, error) {
 	id := getRandomNumber()
 	if sourceLang == "" {
 		lang := whatlanggo.DetectLang(translateText)
@@ -176,23 +206,7 @@ func Translate(sourceLang string, targetLang string, translateText string, proxy
 	request.Header.Set("Connection", "keep-alive")
 
 	// Making the HTTP request to the DeepL API
-	var client *http.Client
-	if proxyURL != "" {
-		proxy, err := url.Parse(proxyURL)
-		if err != nil {
-			return DeepLXTranslationResult{
-				Code:    http.StatusServiceUnavailable,
-				Message: "Uknown error",
-			}, nil
-		}
-		transport := &http.Transport{
-			Proxy: http.ProxyURL(proxy),
-		}
-		client = &http.Client{Transport: transport}
-	} else {
-		client = &http.Client{}
-	}
-
+    client := &http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
 		log.Println(err)

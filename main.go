@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 
@@ -55,70 +54,14 @@ func main() {
         fmt.Println("Proxy: Disabled")
     }
 
-	// if proxyURL != "" {
-	//     proxy, err := url.Parse(proxyURL)
-	//     if err != nil {
-	//         log.Fatalf("Failed to parse proxy URL: %v", err)
-	//     }
-	//     http.DefaultTransport = &http.Transport{
-	//         Proxy: http.ProxyURL(proxy),
-	//     }
-	// }
-
 	// Setting the application to release mode
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
     r.LoadHTMLGlob("templates/*")
 	r.Use(cors.Default())
 
-    // DeepL free account API
-    if cfg.Section("deepl").Key("enable").MustBool() {
-        fmt.Println("    - deepl: enabled")
-        r.GET("/deepl", func(c *gin.Context) {
-            sourceLang := ""
-            targetLang := "ZH"
-            translateText := c.Query("gdword")
-
-            result, err := deepl.Translate(sourceLang, targetLang, translateText, proxyURL)
-            if err != nil {
-                log.Fatalf("Translation failed: %s", err)
-            }
-
-            if result.Code == http.StatusOK {
-                c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
-                    "Text": result.Data,
-                })
-            } else {
-                c.String(result.Code, result.Message)
-            }
-        })
-    } else {
-        fmt.Println("    - deepl: disabled")
-    }
-
+    deepl.TranslateInit(r, cfg)
     youdao.TranslateInit(r, cfg)
-
-    if cfg.Section("openai").Key("enable").MustBool() {
-        fmt.Println("    - openai: enabled")
-        r.GET("/openai", func(c *gin.Context) {
-            c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
-                "Text": "Not implemented",
-            })
-        })
-    } else {
-        fmt.Println("    - openai: disabled")
-    }
-
-    if cfg.Section("google").Key("enable").MustBool() {
-        fmt.Println("    - google: enabled")
-        r.GET("/google", func(c *gin.Context) {
-            c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
-                "Text": "Not implemented",
-            })
-        })
-    } else {
-        fmt.Println("    - google: disabled")
-    }
 
     // Catch-all route to handle undefined paths
 	r.NoRoute(func(c *gin.Context) {
