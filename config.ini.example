@@ -7,6 +7,8 @@ enable = true
 
 [youdao]
 enable = false
+app_key = ""
+app_secret = ""
 
 [openai]
 enable = false
