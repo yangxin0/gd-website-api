@@ -7,9 +7,10 @@ import (
 	"net/http"
 	"os"
 
-    "github.com/yangxin0/gd-website-api/deepl"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/yangxin0/gd-website-api/deepl"
+	"github.com/yangxin0/gd-website-api/youdao"
 	"gopkg.in/ini.v1"
 )
 
@@ -48,11 +49,10 @@ func main() {
         proxyURL = proxyEnv
     }
 	fmt.Printf("Goldendict Website API. Listening on 0.0.0.0:%v\n", port)
-	fmt.Printf("    - Listening on 0.0.0.0:%v\n", port)
     if proxyURL != "" {
-        fmt.Printf("    - proxy: %v\n", proxyURL)
+        fmt.Printf("Proxy: %v\n", proxyURL)
     } else {
-        fmt.Println("    - proxy: disabled")
+        fmt.Println("Proxy: Disabled")
     }
 
 	// if proxyURL != "" {
@@ -96,16 +96,7 @@ func main() {
         fmt.Println("    - deepl: disabled")
     }
 
-    if cfg.Section("youdao").Key("enable").MustBool() {
-        fmt.Println("    - youdao: enabled")
-        r.GET("/youdao", func(c *gin.Context) {
-            c.HTML(http.StatusOK, "goldendict.tmpl", gin.H{
-                "Text": "Not implemented",
-            })
-        })
-    } else {
-        fmt.Println("    - youdao: disabled")
-    }
+    youdao.TranslateInit(r, cfg)
 
     if cfg.Section("openai").Key("enable").MustBool() {
         fmt.Println("    - openai: enabled")
