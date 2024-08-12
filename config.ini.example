@@ -1,6 +1,6 @@
 [default]
 port = 1188
-# proxy = socks5://127.0.0.1:7891
+# proxy = http://127.0.0.1:7890
 
 [deepl]
 enable = true
@@ -12,6 +12,7 @@ app_secret = ""
 
 [openai]
 enable = false
+app_secret = ""
 
 [google]
 enable = false
