@@ -1,5 +1,5 @@
 [default]
-port = 1189
+port = 1188
 # proxy = socks5://127.0.0.1:7891
 
 [deepl]

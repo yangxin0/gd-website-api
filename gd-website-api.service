@@ -5,7 +5,7 @@ After=network-online.target
 [Service]
 Type=simple
 Restart=always
-ExecStart=/usr/local/gd-website-api/DeepLX
+ExecStart=/usr/local/gd-website-api/bin/gd-website-api
 WorkingDirectory=/usr/local/gd-website-api
 
 [Install]
