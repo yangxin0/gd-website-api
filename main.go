@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/yangxin0/gd-website-api/deepl"
 	"github.com/yangxin0/gd-website-api/google"
+	"github.com/yangxin0/gd-website-api/openai"
 	"github.com/yangxin0/gd-website-api/youdao"
 	"gopkg.in/ini.v1"
 )
@@ -38,7 +39,7 @@ func main() {
     proxyURL := setupProxy(cfg)
 	fmt.Printf("Goldendict Website API. Listening on 0.0.0.0:%v\n", port)
     if proxyURL != "" {
-        fmt.Printf("Proxy: %v\n(https/http)", proxyURL)
+        fmt.Printf("Proxy: %v(https/http)\n", proxyURL)
     } else {
         fmt.Println("Proxy: Disabled")
     }
@@ -52,6 +53,7 @@ func main() {
     deepl.TranslateInit(r, cfg)
     youdao.TranslateInit(r, cfg)
     google.TranslateInit(r, cfg)
+    openai.TranslateInit(r, cfg)
 
     // Catch-all route to handle undefined paths
 	r.NoRoute(func(c *gin.Context) {

@@ -16,3 +16,4 @@ app_secret = ""
 
 [google]
 enable = false
+app_secret = ""
