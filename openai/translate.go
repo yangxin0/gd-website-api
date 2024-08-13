@@ -44,7 +44,7 @@ func Translate(targetLang string, text string) (string, error) {
     resp, err := client.CreateChatCompletion(
         context.Background(),
 		oai.ChatCompletionRequest{
-            Model: oai.GPT4oMini,
+            Model: oai.GPT4o,
 			Messages: []oai.ChatCompletionMessage{
                 {
                     Role: oai.ChatMessageRoleSystem,
